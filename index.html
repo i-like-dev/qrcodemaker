@@ -9,12 +9,23 @@
 <body>
     <div class="container">
         <h1>QR碼生成器</h1>
-        <textarea id="inputText" placeholder="輸入文字"></textarea>
+        <select id="qrType">
+            <option value="text">文字</option>
+            <option value="sms">SMS</option>
+            <option value="email">Email</option>
+            <option value="wifi">Wi-Fi</option>
+            <option value="link">連結</option>
+        </select>
+        <textarea id="inputText" placeholder="輸入內容"></textarea>
         <input type="file" id="imageInput" accept="image/*">
+        <label for="logoInput">上傳Logo圖片：</label>
+        <input type="file" id="logoInput" accept="image/*">
         <button id="generateQR">生成QR碼</button>
         <a id="downloadLink" style="display: none;" download="qrcode.png">下載QR碼</a>
         <div id="qrcode"></div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

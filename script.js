@@ -1,27 +1,24 @@
 $(document).ready(function () {
     const generateQRButton = $("#generateQR");
-    const qrTypeSelect = $("#qrType");
-    const inputText = $("#inputText");
+    const inputLink = $("#inputLink");
     const imageInput = $("#imageInput");
     const logoInput = $("#logoInput");
-    const downloadLink = $("#downloadLink");
+    const utmInputs = $("#utmInputs");
+    const sourceInput = $("#utmSource");
+    const mediumInput = $("#utmMedium");
+    const campaignInput = $("#utmCampaign");
     const qrcodeContainer = $("#qrcode");
 
     generateQRButton.click(function () {
-        const qrType = qrTypeSelect.val();
-        const text = inputText.val();
+        const link = inputLink.val();
+        const source = sourceInput.val();
+        const medium = mediumInput.val();
+        const campaign = campaignInput.val();
 
-        if (qrType === "text" && text) {
-            generateQRCode(text);
-        } else if (qrType === "sms" && text) {
-            generateQRCode("SMSTO:" + text);
-        } else if (qrType === "email" && text) {
-            generateQRCode("mailto:" + text);
-        } else if (qrType === "wifi" && text) {
-            generateQRCode("WIFI:" + text);
-        } else if (qrType === "link" && text) {
-            generateQRCode(text);
-        }
+        const utmParams = buildUTMParams(source, medium, campaign);
+        const fullLink = appendUTMParams(link, utmParams);
+
+        generateQRCode(fullLink);
     });
 
     logoInput.change(function () {
@@ -34,15 +31,12 @@ $(document).ready(function () {
                 const logoData = event.target.result;
                 qrcodeContainer.empty();
                 const qr = new QRCodeWithLogo({
-                    content: inputText.val(),
+                    content: inputLink.val(),
                     logo: logoData,
                     container: qrcodeContainer,
                     width: 200,
                     height: 200,
                 });
-
-                downloadLink.attr("href", qr.toDataURL());
-                downloadLink.css("display", "block");
             };
 
             reader.readAsDataURL(file);
@@ -56,8 +50,20 @@ $(document).ready(function () {
             value: content,
             size: 200,
         });
+    }
 
-        downloadLink.attr("href", qr.toDataURL());
-        downloadLink.css("display", "block");
+    function buildUTMParams(source, medium, campaign) {
+        const params = [];
+        if (source) params.push(`utm_source=${encodeURIComponent(source)}`);
+        if (medium) params.push(`utm_medium=${encodeURIComponent(medium)}`);
+        if (campaign) params.push(`utm_campaign=${encodeURIComponent(campaign)}`);
+        return params.join("&");
+    }
+
+    function appendUTMParams(link, params) {
+        if (params) {
+            return `${link}${link.includes("?") ? "&" : "?"}${params}`;
+        }
+        return link;
     }
 });

@@ -7,9 +7,10 @@ body {
     padding: 20px;
 }
 
-select, textarea {
+input[type="text"], input[type="url"], textarea {
     width: 100%;
     margin-bottom: 10px;
+    padding: 5px;
 }
 
 button {
@@ -24,11 +25,11 @@ button {
     margin-top: 20px;
 }
 
-#logoInput {
+#logoInput, #utmInputs {
     display: none;
 }
 
-label[for="logoInput"] {
+label[for="logoInput"], label[for="utmInputs"] {
     cursor: pointer;
     color: #007bff;
 }
